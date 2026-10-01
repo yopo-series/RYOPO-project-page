@@ -1,0 +1,14 @@
+{
+  "name": "ryopo-project-page",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "test": "playwright test",
+    "check": "node tools/check.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}

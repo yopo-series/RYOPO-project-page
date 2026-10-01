@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RYOPO brings end-to-end category-level RGB-D object pose estimation into real time. Explore benchmark comparisons, query-conditioned geometry, and a live mask-free demonstration.">
+  <meta name="theme-color" content="#176541">
+  <meta property="og:title" content="RYOPO | Real-time RGB-D Object Pose Estimation">
+  <meta property="og:description" content="One full-frame predictor. Multiple objects. 9-DoF poses in real time.">
+  <meta property="og:type" content="website">
+  <title>RYOPO | Real-time RGB-D Object Pose Estimation</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" type="module"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="wordmark" href="#" aria-label="RYOPO home"><img src="assets/favicon.svg" alt="" width="26" height="26">RYOPO</a>
+      <nav aria-label="Main navigation">
+        <a href="#showcases">Showcases</a><a href="#comparisons">Results</a><a href="#method">Method</a><a href="#live-demo">Live demo</a>
+      </nav>
+      <a class="series-link" href="https://mikigom.github.io/YOPO-project-page/">YOPO series <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero container" aria-labelledby="title">
+      <p class="eyebrow">RGB-D · CATEGORY-LEVEL OBJECT POSE ESTIMATION</p>
+      <h1 id="title"><span class="hero-name">RYOPO</span><span class="hero-title">Bringing End-to-End Category-Level<br class="desktop-break"> Object Pose Estimation into Real Time</span></h1>
+      <p class="authors"><a href="https://nijkah.github.io/">Hakjin Lee</a><a href="https://mikigom.github.io/">Junghoon Seo</a><a href="https://www.linkedin.com/in/jaehoon-sim-801404175">Jaehoon Sim</a></p>
+      <p class="affiliation">PIT IN Co., Republic of Korea</p>
+      <div class="resource-links" aria-label="Project resources">
+        <span class="resource pending"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h5M9 12h6M9 16h6"/></svg>Paper <small>arXiv soon</small></span>
+        <span class="resource pending"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 7-5 5 5 5m8-10 5 5-5 5M14 4l-4 16"/></svg>Code <small>coming soon</small></span>
+        <a class="resource" href="#video"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3z"/></svg>Video</a>
+      </div>
+      <p class="hero-summary">One full-frame predictor. Multiple objects.<br><strong>9-DoF poses in real time.</strong></p>
+      <div class="hero-media">
+        <figure>
+          <div class="media-topline"><span>Category-level prediction</span><span>REAL275</span></div>
+          <video class="ambient-video" muted loop playsinline preload="none" poster="assets/images/hero-benchmark.jpg" aria-label="RYOPO predictions on REAL275 scene 2" width="800" height="600"><source data-src="assets/videos/hero-benchmark.mp4" type="video/mp4"></video>
+        </figure>
+        <figure>
+          <div class="media-topline"><span>Mask-free live demonstration</span><span>RGB-D camera</span></div>
+          <video class="ambient-video" muted loop playsinline preload="none" poster="assets/images/showcase-bolt-motion.jpg" aria-label="Mask-free RYOPO predicts hex-bolt poses during fast camera motion" width="960" height="540"><source data-src="assets/videos/showcase-bolt-motion.mp4" type="video/mp4"></video>
+        </figure>
+      </div>
+      <div class="hero-media-footer"><span>20 FPS benchmark playback · 30 FPS live camera.</span><button class="text-button" id="motion-toggle" type="button" aria-pressed="false">Pause previews <span aria-hidden="true">Ⅱ</span></button></div>
+      <div class="facts" aria-label="At a glance">
+        <div><strong>31.8 <span>FPS</span></strong><p>RYOPO · RTX A6000</p></div>
+        <div><strong>51.4 <span>FPS</span></strong><p>Mask-free variant · RTX A6000</p></div>
+        <div><strong>RGB + Depth</strong><p>No external instance segmentor</p></div>
+      </div>
+    </section>
+
+    <section class="intro-section section-band">
+      <div class="container intro-grid">
+        <h2>From a scene to<br>object poses.</h2>
+        <div><p>Accurate category-level pose estimation often starts with a separate instance segmentor, then processes each object crop. RYOPO brings detection, segmentation, and pose estimation into a single trainable RGB-D set predictor, without explicit CAD-derived shape priors.</p><p>Shared image and scene encoding avoids repeated crop encoding. Object queries connect measured 3D observations to an explicit pose state, refining rotation, translation, and metric size for multiple objects.</p></div>
+      </div>
+      <div class="container pipeline-intro"><button class="figure-button pipeline-figure" type="button" data-zoom="assets/images/pipeline-overview.svg" data-title="RYOPO at a glance" aria-label="Enlarge the simplified RYOPO pipeline"><img src="assets/images/pipeline-overview.svg" alt="RGB-D input passes through shared encoders, geometry-aware set prediction, and pose-conditioned refinement to produce a set of object classes and 9-DoF poses." width="1200" height="340" loading="lazy"><span>Conceptual overview · Enlarge <span aria-hidden="true">↗</span></span></button></div>
+    </section>
+
+    <section id="video" aria-labelledby="video-title">
+      <div class="container section video-section"><h2 id="video-title" class="eyebrow">OVERVIEW</h2><video class="lazy-video wide-video" controls playsinline preload="none" poster="assets/images/research-overview.jpg" width="1280" height="720" aria-label="Narrated RYOPO research overview"><source data-src="assets/videos/research-overview.mp4" type="video/mp4"></video></div>
+    </section>
+
+    <section class="container section" id="showcases" aria-labelledby="showcase-title">
+      <div class="section-heading"><div><p class="eyebrow">FROM CAPTURED DATA TO LIVE PREDICTIONS</p><h2 id="showcase-title">Real-world showcases</h2></div></div>
+      <div class="showcase-heading"><p>The model was trained on <strong>12 videos of one physical plush toy</strong>. The two additional instances in the live recording were not included in its training data.</p></div>
+      <div class="usagi-grid">
+        <figure class="showcase-card">
+          <div class="media-topline"><span>Training captures</span><span>12 videos · One instance</span></div>
+          <video id="usagi-training" class="lazy-video wide-video" controls playsinline preload="none" poster="assets/images/usagi-training-headside.jpg" width="960" height="540" aria-label="Object-centered training captures of the same plush toy lying face up and face down"><source data-src="assets/videos/usagi-training-headside.mp4" type="video/mp4"></video>
+          <figcaption>Face-up and face-down views · cropped · 5 FPS playback.</figcaption>
+        </figure>
+        <figure class="showcase-card">
+          <div class="media-topline"><span>Live predictions</span><span>Seen + two unseen</span></div>
+          <video id="usagi-demo" class="lazy-video wide-video" controls playsinline preload="none" poster="assets/images/showcase-usagi-labeled.jpg" width="960" height="540" aria-label="Live plush-toy predictions on the training instance and two unseen instances"><source data-src="assets/videos/showcase-usagi-labeled.mp4" type="video/mp4"></video>
+          <figcaption>Original recording · 30 FPS playback.</figcaption>
+        </figure>
+      </div>
+      <div class="usagi-navigation"><div class="instance-chapters" role="group" aria-label="Jump to plush-toy instance">
+        <button type="button" data-usagi-seek="2" aria-controls="usagi-demo">Seen instance <small>0:02</small></button>
+        <button type="button" data-usagi-seek="18" aria-controls="usagi-demo">Unseen instance 1 <small>0:18</small></button>
+        <button type="button" data-usagi-seek="34" aria-controls="usagi-demo">Unseen instance 2 <small>0:34</small></button>
+      </div></div>
+
+      <div class="bolt-gallery" id="live-demo" role="region" aria-roledescription="carousel" aria-labelledby="bolt-title">
+        <div class="section-heading"><div><p class="eyebrow">HEX-BOLT DEMONSTRATIONS</p><h3 id="bolt-title">One frame. Multiple object poses.</h3></div><div class="carousel-arrows"><button type="button" data-bolt-step="-1" aria-label="Previous bolt demonstration" aria-controls="bolt-panels">←</button><span id="bolt-counter" aria-live="polite" aria-atomic="true">1 / 3</span><button type="button" data-bolt-step="1" aria-label="Next bolt demonstration" aria-controls="bolt-panels">→</button></div></div>
+        <p class="symmetry-note">Hex-bolt annotations assume continuous symmetry about the local Y axis.</p>
+        <div class="demo-tabs" role="tablist" aria-label="Hex-bolt demonstrations">
+          <button id="bolt-tab-live" type="button" role="tab" aria-controls="bolt-panel-live" aria-selected="true" data-bolt-tab="0">Object interaction</button>
+          <button id="bolt-tab-motion" type="button" role="tab" aria-controls="bolt-panel-motion" aria-selected="false" tabindex="-1" data-bolt-tab="1">Fast camera motion</button>
+          <button id="bolt-tab-ids" type="button" role="tab" aria-controls="bolt-panel-ids" aria-selected="false" tabindex="-1" data-bolt-tab="2">ID tracking <small>Extension</small></button>
+        </div>
+        <div id="bolt-panels">
+          <article id="bolt-panel-live" class="bolt-panel" role="tabpanel" aria-labelledby="bolt-tab-live" tabindex="0">
+            <div class="demo-description"><h4>Live inference with object interaction</h4><p>A separately trained mask-free model running on an RTX 4080 Super with a RealSense L515.</p></div>
+            <div class="demo-stage"><video id="bolt-live-demo" class="lazy-video" controls playsinline preload="none" poster="assets/images/live-hexbolt.jpg" width="1280" height="720" aria-label="Full live hex-bolt demonstration with the on-screen prediction timer"><source data-src="assets/videos/live-hexbolt.mp4" type="video/mp4"></video></div>
+            <div class="runtime-summary"><p><strong>≈18 ms</strong> online inference · <strong>≤30 FPS</strong> camera limit</p><p>RTX 4080 Super · without ID tracking.</p></div>
+          </article>
+          <article id="bolt-panel-motion" class="bolt-panel" role="tabpanel" aria-labelledby="bolt-tab-motion" tabindex="0" hidden>
+            <div class="demo-description"><h4>Live inference under fast camera motion</h4><p>Live RGB-D inference during rapid camera motion.</p></div>
+            <div class="demo-stage"><video id="bolt-motion-demo" class="lazy-video" controls playsinline preload="none" poster="assets/images/showcase-bolt-motion.jpg" width="960" height="540" aria-label="Live hex-bolt pose predictions during fast camera motion"><source data-src="assets/videos/showcase-bolt-motion.mp4" type="video/mp4"></video></div>
+          </article>
+          <article id="bolt-panel-ids" class="bolt-panel" role="tabpanel" aria-labelledby="bolt-tab-ids" tabindex="0" hidden>
+            <div class="demo-description"><h4>Per-frame prediction + ID tracking</h4><p>Left: per-frame RYOPO. Right: a separate tracker adds object IDs. This extension is not part of the paper’s benchmark results.</p></div>
+            <div class="demo-stage"><video id="bolt-id-demo" class="lazy-video" controls playsinline preload="none" poster="assets/images/showcase-bolt-ids.jpg" width="1440" height="454" aria-label="Left: per-frame RYOPO; right: additional object-ID tracker"><source data-src="assets/videos/showcase-bolt-ids.mp4" type="video/mp4"></video></div>
+          </article>
+        </div>
+        <noscript><p>Additional recordings: <a href="assets/videos/showcase-bolt-motion.mp4">fast camera motion</a> and <a href="assets/videos/showcase-bolt-ids.mp4">per-frame prediction / ID tracking</a>.</p></noscript>
+      </div>
+
+      <div class="capture-workflow" id="snappose">
+        <div>
+          <p class="eyebrow">HOW WE LABEL THE CAPTURES</p><h3>RGB-D annotation with SnapPose</h3>
+          <p>Our custom datasets were labeled with SnapPose, a browser-based tool for annotating object rotation, translation, and metric size in RGB-D point clouds.</p>
+          <ol class="annotation-steps"><li><strong>Capture RGB-D</strong> with marker-based camera poses.</li><li><strong>Label a reference frame</strong> in the 3D workspace.</li><li><strong>Propagate and inspect labels</strong> across a static-object capture using camera poses.</li></ol>
+          <p class="fine-print">Markers are used for annotation, not pose inference.</p>
+          <p class="tool-release"><a href="https://github.com/pitin-ev/snappose">SnapPose on GitHub <span aria-hidden="true">↗</span></a><span>Public release planned · currently private</span></p>
+        </div>
+        <figure><button class="figure-button" type="button" data-zoom="assets/images/snappose-workspace.jpg" data-title="SnapPose annotation workspace" aria-label="Enlarge the SnapPose annotation workspace"><img src="assets/images/snappose-workspace.jpg" alt="SnapPose interface displaying an RGB-D point cloud with editable 3D object boxes and orientation axes" width="1280" height="666" loading="lazy"><span>Enlarge workspace <span aria-hidden="true">↗</span></span></button><figcaption>Default example: NOCS REAL275, manually annotated with SnapPose.</figcaption></figure>
+      </div>
+
+    </section>
+
+    <section class="container section" id="comparisons" aria-labelledby="comparison-title">
+      <div class="section-heading"><div><p class="eyebrow">SEE THE PREDICTIONS</p><h2 id="comparison-title">Benchmark comparisons</h2></div></div>
+      <p class="section-lead">RYOPO, AG-Pose (DINO), CleanPose, and VI-Net on the same RGB-D frames.</p>
+      <div class="gallery-toolbar">
+        <div class="segmented" role="group" aria-label="Comparison dataset"><button type="button" class="active" data-gallery-dataset="REAL275" aria-pressed="true">NOCS REAL275</button><button type="button" data-gallery-dataset="HouseCat6D" aria-pressed="false">HouseCat6D</button></div>
+        <label class="select-label" for="sequence-select">Sequence <select id="sequence-select"><option value="scene_2">Scene 2</option><option value="scene_5">Scene 5</option><option value="scene_6">Scene 6</option></select></label>
+      </div>
+      <div class="comparison-frame"><video id="comparison-video" class="lazy-video" controls playsinline preload="none" width="1280" height="1082" poster="assets/images/real275-scene_2.jpg" aria-label="Four-method comparison on REAL275 scene 2"><source data-src="assets/videos/real275-scene_2.mp4" type="video/mp4"></video></div>
+      <div class="legend-line"><div><span class="legend-item"><i class="line-green"></i>Predicted cuboids</span><span class="legend-item"><i class="line-white"></i>Ground truth</span><span class="legend-item">RGB axes: x / y / z</span></div></div>
+      <p class="protocol-note">20 FPS playback, not inference speed.</p>
+    </section>
+
+
+    <section class="container section results-followup" id="accuracy" aria-labelledby="accuracy-title">
+      <div class="section-heading"><div><p class="eyebrow">QUANTITATIVE RESULTS</p><h2 id="accuracy-title">All-object accuracy</h2></div></div>
+      <p class="section-lead">Independent 3D IoU and all-object pose AP (%); missed detections count as failures.</p>
+      <div class="segmented metric-tabs" role="tablist" aria-label="Accuracy benchmark"><button id="tab-real" type="button" role="tab" data-metric-dataset="REAL275" aria-controls="metric-panel" aria-selected="true" class="active">REAL275</button><button id="tab-camera" type="button" role="tab" data-metric-dataset="CAMERA25" aria-controls="metric-panel" aria-selected="false" tabindex="-1">CAMERA25</button><button id="tab-housecat" type="button" role="tab" data-metric-dataset="HouseCat6D" aria-controls="metric-panel" aria-selected="false" tabindex="-1">HouseCat6D</button></div>
+      <div id="metric-panel" role="tabpanel" aria-labelledby="tab-real" tabindex="0">
+        <div class="table-scroll"><table id="accuracy-table"><caption class="sr-only">REAL275 all-object accuracy. Higher is better.</caption><thead><tr><th scope="col">Method</th><th scope="col">IoU<sub>50</sub></th><th scope="col">5° 2 cm</th><th scope="col">5° 5 cm</th><th scope="col">10° 5 cm</th></tr></thead><tbody>
+          <tr><th scope="row">DPDN</th><td>83.4</td><td>38.1</td><td>42.2</td><td>65.3</td></tr>
+          <tr><th scope="row">HS-Pose</th><td>82.8</td><td>38.5</td><td>46.6</td><td>70.1</td></tr>
+          <tr><th scope="row">VI-Net</th><td>83.1</td><td>40.7</td><td>47.1</td><td>68.3</td></tr>
+          <tr><th scope="row">AG-Pose (DINO)</th><td>84.1</td><td>46.4</td><td>52.7</td><td>71.0</td></tr>
+          <tr><th scope="row">CleanPose</th><td>84.1</td><td><strong>50.4</strong></td><td><strong>55.1</strong></td><td>72.3</td></tr>
+          <tr class="ours"><th scope="row">RYOPO</th><td><strong>93.0</strong></td><td>38.7</td><td>51.1</td><td><strong>73.6</strong></td></tr>
+          <tr class="maskfree-row"><th scope="row">RYOPO, mask-free</th><td>91.9</td><td>36.7</td><td>48.5</td><td>71.9</td></tr>
+        </tbody></table></div>
+        <p class="protocol-note" id="metric-protocol">Per-object methods use the benchmark’s supplied predicted masks; RYOPO uses its own predictions.</p>
+        <p class="fine-print">Mask-free: separately trained with adjusted settings. Accuracy: eager FP32.</p>
+      </div>
+      <noscript><p>Enable JavaScript to switch benchmark tables and sequences. The REAL275 table remains available above.</p></noscript>
+    </section>
+
+    <section class="section-band" id="method" aria-labelledby="method-title">
+      <div class="container section">
+        <div class="section-heading"><div><p class="eyebrow">HOW IT WORKS</p><h2 id="method-title">Object queries meet measured geometry.</h2></div></div>
+        <p class="section-lead">Built on the DETR-style EdgeCrafter backbone, RYOPO integrates object-associated depth observations and explicit pose-state refinement into a shared full-frame predictor.</p>
+        <button class="figure-button" type="button" data-zoom="assets/images/architecture.svg" data-title="RYOPO architecture" aria-label="Enlarge the RYOPO architecture diagram"><img src="assets/images/architecture.svg" alt="RYOPO architecture: shared RGB and sparse 3D scene encoders, query-conditioned geometry (A), geometry feedback (B), and object-centric pose refinement (C)." loading="lazy" width="1750" height="920"><span>Enlarge diagram <span aria-hidden="true">↗</span></span></button>
+        <div class="module-grid">
+          <article class="module module-a"><span class="module-letter">(A)</span><h3>Query-conditioned geometry</h3><p>Predicted object regions associate measured depth points with each query. Geometry, image features, and observation support form object point descriptors.</p></article>
+          <article class="module module-b"><span class="module-letter">(B)</span><h3>Geometry feedback</h3><p>Object and shared scene features update the queries during set decoding, connecting image-based predictions to 3D observations.</p></article>
+          <article class="module module-c"><span class="module-letter">(C)</span><h3>Pose-state refinement</h3><p>The object query and current pose condition attention to point descriptors. Residual corrections update the pose and condition subsequent refinement.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="container release-section" aria-labelledby="release-title"><h2 id="release-title">Paper &amp; code</h2><p>Coming soon.</p><a class="contact-link" href="mailto:hj@pitin-ev.com">Contact the authors <span aria-hidden="true">↗</span></a></section>
+  </main>
+  <footer class="site-footer"><div class="container"><a class="wordmark" href="#">RYOPO</a><p>PIT IN Co. · <a href="https://mikigom.github.io/YOPO-project-page/">YOPO series</a></p><a href="#">Back to top ↑</a></div></footer>
+  <dialog id="figure-dialog" aria-labelledby="dialog-title"><div class="dialog-toolbar"><h2 id="dialog-title">Architecture</h2><button type="button" id="close-dialog" aria-label="Close enlarged diagram">Close <span aria-hidden="true">×</span></button></div><div class="diagram-scroll"><img id="dialog-image" alt="" width="1750" height="920"></div><p>Scroll horizontally on small screens to inspect the diagram. Press Escape to close.</p></dialog>
+</body>
+</html>

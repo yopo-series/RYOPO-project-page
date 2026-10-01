@@ -1,0 +1,14 @@
+{
+  "REAL275": {
+    "rows": [["DPDN",83.4,38.1,42.2,65.3],["HS-Pose",82.8,38.5,46.6,70.1],["VI-Net",83.1,40.7,47.1,68.3],["AG-Pose (DINO)",84.1,46.4,52.7,71.0],["CleanPose",84.1,50.4,55.1,72.3],["RYOPO",93.0,38.7,51.1,73.6],["RYOPO, mask-free",91.9,36.7,48.5,71.9]],
+    "protocol": "Per-object methods use the benchmark’s supplied predicted masks; RYOPO uses its own predictions."
+  },
+  "CAMERA25": {
+    "rows": [["DPDN",93.9,64.1,70.7,84.8],["HS-Pose",82.1,62.2,68.9,75.9],["VI-Net",91.4,70.2,77.0,82.0],["AG-Pose (DINO)",94.1,75.6,79.5,87.9],["CleanPose",94.1,76.5,80.0,88.1],["RYOPO",98.6,79.8,85.8,92.5],["RYOPO, mask-free",98.4,77.0,85.1,92.0]],
+    "protocol": "Per-object methods use the benchmark’s supplied predicted masks; RYOPO uses its own predictions."
+  },
+  "HouseCat6D": {
+    "rows": [["AG-Pose (DINO)",64.7,16.5,17.7,48.1],["CleanPose",66.2,19.6,21.1,51.2],["RYOPO",57.8,19.1,21.5,43.2],["RYOPO, mask-free",60.2,19.3,24.4,41.1]],
+    "protocol": "AG-Pose and CleanPose use RYOPO’s predicted boxes and masks, not ground-truth inputs."
+  }
+}
