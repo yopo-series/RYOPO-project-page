@@ -50,7 +50,7 @@ test('mobile layout and native media', async ({page})=>{
   await page.setViewportSize({width:390,height:844});await page.goto('/');
   const size=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
   expect(size.scroll).toBeLessThanOrEqual(size.width);
-  await expect(page.getByRole('link',{name:'Live demo',exact:true})).toBeVisible();
+  await expect(page.getByRole('navigation',{name:'Main navigation'}).getByRole('link',{name:'Demos',exact:true})).toBeVisible();
   for (const image of await page.locator('main img[loading="lazy"]').all()) {
     await image.scrollIntoViewIfNeeded();
     await expect.poll(()=>image.evaluate(i=>i.complete&&i.naturalWidth>0)).toBe(true);
@@ -58,10 +58,48 @@ test('mobile layout and native media', async ({page})=>{
   await page.evaluate(()=>window.scrollTo(0,0));
   await page.screenshot({path:'test-results/mobile.png',fullPage:true});
   await page.screenshot({path:'test-results/mobile-top.png'});
-  await page.getByRole('link',{name:'Live demo',exact:true}).click();
-  const v=page.locator('#bolt-live-demo');await v.evaluate(v=>{v.muted=true;v.play();});
+  await page.getByRole('navigation',{name:'Main navigation'}).getByRole('link',{name:'Demos',exact:true}).click();
+  const v=page.locator('#bolt-live-demo');await v.scrollIntoViewIfNeeded();
+  await expect(v.locator('source')).toHaveAttribute('src',/\.mp4$/);
+  await v.evaluate(v=>{v.muted=true;v.play();});
   await expect.poll(()=>v.evaluate(v=>v.currentTime),{timeout:20000}).toBeGreaterThan(0.2);
   await v.evaluate(v=>v.pause());
+});
+test('main navigation follows page order without nested or duplicate entries',async({page})=>{
+  await page.goto('/');
+  const nav=page.getByRole('navigation',{name:'Main navigation'});
+  await expect(page.locator('.site-header')).toHaveCSS('background-color','rgb(255, 255, 255)');
+  await expect(nav.getByRole('link')).toHaveText(['Overview','Demos','Results','Method']);
+  expect(await nav.getByRole('link').evaluateAll(links=>links.map(a=>a.getAttribute('href'))))
+    .toEqual(['#video','#showcases','#comparisons','#method']);
+  expect(await nav.evaluate(el=>{
+    const targets=[...el.querySelectorAll('a')].map(a=>document.querySelector(a.getAttribute('href')));
+    return targets.every((target,i)=>target?.parentElement.tagName==='MAIN' &&
+      (i===0 || Boolean(targets[i-1].compareDocumentPosition(target)&Node.DOCUMENT_POSITION_FOLLOWING)));
+  })).toBe(true);
+  await expect(page.locator('.site-header a[href="#live-demo"], .site-header .series-link')).toHaveCount(0);
+  await expect(page.locator('.site-footer').getByRole('link',{name:'YOPO series'})).toBeVisible();
+  for(const width of [320,390,768,1440]) {
+    await page.setViewportSize({width,height:900});
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    for(const link of await nav.getByRole('link').all()) {
+      await expect(link).toBeInViewport();
+      const bounds=await link.boundingBox();
+      expect(bounds.height).toBeGreaterThanOrEqual(44);
+      expect(bounds.x).toBeGreaterThanOrEqual(0);
+      expect(bounds.x+bounds.width).toBeLessThanOrEqual(width);
+      await link.click();
+      const target=await link.getAttribute('href');
+      expect(new URL(page.url()).hash).toBe(target);
+      await expect.poll(()=>page.locator(target).evaluate(el=>
+        el.getBoundingClientRect().top-document.querySelector('.site-header').getBoundingClientRect().bottom))
+        .toBeGreaterThanOrEqual(-1);
+    }
+    await page.locator('.site-header').screenshot({path:`test-results/navigation-${width}.png`});
+  }
+  await page.goto('http://127.0.0.1:4174/RYOPO-project-page/');
+  await page.getByRole('navigation',{name:'Main navigation'}).getByRole('link',{name:'Overview'}).click();
+  await expect(page).toHaveURL('http://127.0.0.1:4174/RYOPO-project-page/#video');
 });
 test('private preview supports project subpath and byte ranges',async({page,request})=>{
   await page.goto('http://127.0.0.1:4174/RYOPO-project-page/');
