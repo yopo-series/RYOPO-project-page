@@ -280,7 +280,8 @@ test('mask-free all-object values agree on every dataset and at project subpath'
 test('training preview preserves its duration and plays the face-down excerpt',async({page})=>{
   await page.goto('/');
   const v=page.locator('#usagi-training');
-  await expect(v.locator('..')).toContainText('Face-up and face-down views');
+  await expect(v.locator('..').locator('figcaption')).toHaveText('Cropped training views · 5 FPS playback.');
+  await expect(v).toHaveAttribute('aria-label','Training captures of the same plush toy from multiple viewpoints');
   await v.scrollIntoViewIfNeeded();
   await expect(v.locator('source')).toHaveAttribute('src',/usagi-training-headside\.mp4$/);
   await v.evaluate(async v=>{v.muted=true;await v.play();});
