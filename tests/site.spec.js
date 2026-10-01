@@ -248,6 +248,8 @@ test('overview, simplified pipeline, direct benchmark player, and concise sectio
   await expect(page.locator('#video video')).toHaveCount(1);
   await expect(page.locator('#video-title')).toHaveText('OVERVIEW');
   await expect(page.locator('#video p, .showcase-heading h3, .attribution, #metric-takeaway')).toHaveCount(0);
+  await expect(page.locator('.release-section, #release-title, .contact-link')).toHaveCount(0);
+  await expect(page.locator('main > section').last()).toHaveAttribute('id','method');
   for (const text of ['The approach, in three minutes.', 'One training instance. Two unseen instances.', 'Visual foundation:', 'Set-prediction lineage:']) {
     await expect(page.locator('main')).not.toContainText(text);
   }
