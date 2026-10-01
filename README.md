@@ -2,7 +2,7 @@
 
 Research website for **RYOPO: Bringing End-to-End Category-Level Object Pose Estimation into Real Time**, by Hakjin Lee, Junghoon Seo, and Jaehoon Sim (PIT IN Co.).
 
-Private preview. Paper and code links are pending release; no manuscript PDF is included. GitHub Pages is disabled.
+[Project website](https://yopo-series.github.io/RYOPO-project-page/). Paper and code links are pending release; no manuscript PDF is included.
 
 ## Preview
 
@@ -43,4 +43,4 @@ Checks cover links, benchmark data, desktop/mobile layout, video playback, galle
 
 ## Publish
 
-Add the final arXiv and public code URLs when ready. **Enable GitHub Pages only with author approval**: it can expose the site even from a private repository. No deployment workflow is configured.
+GitHub Pages publishes the repository root from `main`. Push updates to `main` to deploy; `.nojekyll` keeps the site static. Add the final arXiv and public code URLs when ready.
