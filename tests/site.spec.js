@@ -124,8 +124,13 @@ test('previews can be played and paused, with no small-screen overflow',async({p
 });
 test('custom showcases play, distinguish instances, and credit the annotation tool',async({page})=>{
   await page.goto('/');
-  await expect(page.locator('#showcases > .section-lead')).toHaveText('Both the plush-toy and hex-bolt demos use mask-free RYOPO models, trained separately on their respective datasets.');
+  await expect(page.locator('#showcases > .section-lead')).toHaveText('Both demos use a RealSense L515 RGB-D camera and mask-free RYOPO models trained separately on their respective datasets.');
   await expect(page.locator('#showcases > .section-lead strong')).toHaveText('mask-free RYOPO');
+  const showcaseText=await page.locator('#showcases').textContent();
+  expect(showcaseText.match(/RealSense L515/g)).toHaveLength(1);
+  expect(showcaseText.match(/mask-free/gi)).toHaveLength(1);
+  await expect(page.locator('#bolt-panel-live .demo-description p')).toHaveCount(0);
+  await expect(page.locator('#bolt-panel-live .runtime-summary')).toContainText('RTX 4080 Super');
   await expect(page.locator('#usagi-scope, #showcases a[download]')).toHaveCount(0);
   await expect(page.locator('#usagi-demo')).not.toHaveAttribute('aria-describedby','usagi-scope');
   await expect(page.locator('#showcases')).toContainText('one physical plush toy');

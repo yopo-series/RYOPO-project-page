@@ -71,7 +71,7 @@
 
     <section class="container section" id="showcases" aria-labelledby="showcase-title">
       <div class="section-heading"><div><p class="eyebrow">FROM CAPTURED DATA TO LIVE PREDICTIONS</p><h2 id="showcase-title">Real-world showcases</h2></div></div>
-      <p class="section-lead">Both the plush-toy and hex-bolt demos use <strong>mask-free RYOPO</strong> models, trained separately on their respective datasets.</p>
+      <p class="section-lead">Both demos use a RealSense L515 RGB-D camera and <strong>mask-free RYOPO</strong> models trained separately on their respective datasets.</p>
       <div class="showcase-heading"><p>The plush-toy model was trained on <strong>12 videos of one physical plush toy</strong>. The two additional instances in the live recording were not included in its training data.</p></div>
       <div class="usagi-grid">
         <figure class="showcase-card">
@@ -101,7 +101,7 @@
         </div>
         <div id="bolt-panels">
           <article id="bolt-panel-live" class="bolt-panel" role="tabpanel" aria-labelledby="bolt-tab-live" tabindex="0">
-            <div class="demo-description"><h4>Live inference with object interaction</h4><p>A separately trained mask-free model running on an RTX 4080 Super with a RealSense L515.</p></div>
+            <div class="demo-description"><h4>Live inference with object interaction</h4></div>
             <div class="demo-stage"><video id="bolt-live-demo" class="lazy-video" controls playsinline preload="none" poster="assets/images/live-hexbolt.jpg" width="1280" height="720" aria-label="Full live hex-bolt demonstration with the on-screen prediction timer"><source data-src="assets/videos/live-hexbolt.mp4" type="video/mp4"></video></div>
             <div class="runtime-summary"><p><strong>≈18 ms</strong> online inference · <strong>≤30 FPS</strong> camera limit</p><p>RTX 4080 Super · without ID tracking.</p></div>
           </article>
