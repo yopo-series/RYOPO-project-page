@@ -141,3 +141,29 @@ $$('[data-zoom]').forEach(b => b.addEventListener('click', () => {
 }));
 $('#close-dialog').addEventListener('click', () => dialog.close());
 dialog.addEventListener('click', e => { if(e.target === dialog) { const r=dialog.getBoundingClientRect(); if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom) dialog.close(); } });
+
+const citationButton = $('#copy-bibtex');
+const citationCode = $('#bibtex');
+const citationStatus = $('#citation-status');
+citationButton.hidden = false;
+citationButton.addEventListener('click', async () => {
+  citationButton.disabled = true;
+  citationStatus.textContent = '';
+  try {
+    await navigator.clipboard.writeText(citationCode.textContent.trim());
+    citationStatus.textContent = 'BibTeX copied.';
+  } catch {
+    // HTTP previews and restricted browsers may not expose the Clipboard API.
+    const range = document.createRange();
+    range.selectNodeContents(citationCode);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    let copied = false;
+    try { copied = document.execCommand('copy'); } catch { /* Offer manual copying below. */ }
+    citationStatus.textContent = copied ? 'BibTeX copied.' : 'Copy unavailable. The BibTeX is selected for manual copying.';
+    if (copied) selection.removeAllRanges();
+  } finally {
+    citationButton.disabled = false;
+  }
+});

@@ -249,7 +249,7 @@ test('overview, simplified pipeline, direct benchmark player, and concise sectio
   await expect(page.locator('#video-title')).toHaveText('OVERVIEW');
   await expect(page.locator('#video p, .showcase-heading h3, .attribution, #metric-takeaway')).toHaveCount(0);
   await expect(page.locator('.release-section, #release-title, .contact-link')).toHaveCount(0);
-  await expect(page.locator('main > section').last()).toHaveAttribute('id','method');
+  await expect(page.locator('main > section').last()).toHaveAttribute('id','citation');
   for (const text of ['The approach, in three minutes.', 'One training instance. Two unseen instances.', 'Visual foundation:', 'Set-prediction lineage:']) {
     await expect(page.locator('main')).not.toContainText(text);
   }
@@ -297,4 +297,50 @@ test('training preview preserves its duration and plays the face-down excerpt',a
   await expect.poll(()=>v.evaluate(v=>!v.seeking&&v.readyState>=2)).toBe(true);
   expect(await v.evaluate(v=>[v.videoWidth,v.videoHeight])).toEqual([960,540]);
   await page.locator('.usagi-grid').screenshot({path:'test-results/usagi-facedown.png',style:'.site-header{visibility:hidden}'});
+});
+
+test('provisional citation copies exactly and fits desktop and mobile', async ({page,context}) => {
+  await context.grantPermissions(['clipboard-read','clipboard-write']);
+  await page.goto('/#citation');
+  await expect(page.locator('main > section').last()).toHaveAttribute('id','citation');
+  await expect(page.locator('#citation-title')).toHaveText('Citation');
+  await expect(page.locator('#citation-note')).toContainText('Provisional');
+  const bibtex=(await page.locator('#bibtex').textContent()).trim();
+  expect(bibtex).toContain('title         = {{RYOPO}: Bringing End-to-End Category-Level Object Pose Estimation into Real Time}');
+  expect(bibtex).toContain('author        = {Hakjin Lee and Junghoon Seo and Jaehoon Sim}');
+  expect(bibtex).toContain('eprint        = {ARXIV_ID_PENDING}');
+  expect(bibtex).toContain('archivePrefix = {arXiv}');
+  await page.getByRole('button',{name:'Copy BibTeX'}).click();
+  await expect(page.locator('#citation-status')).toHaveText('BibTeX copied.');
+  expect(await page.evaluate(()=>navigator.clipboard.readText())).toBe(bibtex);
+  await expect(page.locator('#citation a[href*="arxiv.org"]')).toHaveCount(0);
+  await page.locator('#citation').screenshot({path:'test-results/citation-desktop.png',style:'.site-header{visibility:hidden}'});
+  for (const width of [320,390,768,1440]) {
+    await page.setViewportSize({width,height:900});
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    expect(await page.locator('.citation-code').evaluate(e=>e.scrollWidth<=e.clientWidth)).toBe(true);
+    if(width===390) await page.locator('#citation').screenshot({path:'test-results/citation-mobile.png',style:'.site-header{visibility:hidden}'});
+  }
+});
+
+test('citation offers manual selection when clipboard access is blocked', async ({page}) => {
+  await page.addInitScript(()=>{
+    Object.defineProperty(navigator,'clipboard',{value:{writeText:async()=>{throw new Error('Clipboard denied');}}});
+    document.execCommand=()=>false;
+  });
+  await page.goto('http://127.0.0.1:4174/RYOPO-project-page/#citation');
+  await page.getByRole('button',{name:'Copy BibTeX'}).click();
+  await expect(page.locator('#citation-status')).toHaveText('Copy unavailable. The BibTeX is selected for manual copying.');
+  expect(await page.evaluate(()=>window.getSelection().toString())).toBe(await page.locator('#bibtex').textContent());
+  await expect(page.getByRole('button',{name:'Copy BibTeX'})).toBeEnabled();
+});
+
+test('citation remains readable without JavaScript', async ({browser}) => {
+  const context=await browser.newContext({javaScriptEnabled:false});
+  try {
+    const page=await context.newPage();
+    await page.goto('http://127.0.0.1:4173/#citation');
+    await expect(page.locator('#bibtex')).toContainText('ARXIV_ID_PENDING');
+    await expect(page.locator('#copy-bibtex')).toBeHidden();
+  } finally { await context.close(); }
 });

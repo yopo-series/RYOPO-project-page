@@ -23,6 +23,7 @@ The network preview has no authentication; anyone who can reach the port can vie
 ## Edit
 
 - `index.html`: text, media, authors, and release links.
+- The final Citation section contains provisional BibTeX. Replace `ARXIV_ID_PENDING` with the assigned arXiv ID and remove the provisional note after submission.
 - `styles.css`, `app.js`, `assets/scripts/demo-gallery.js`: layout and interactions.
 - `data/results.json`: benchmark results. Columns: method, IoU50, 5° 2 cm, 5° 5 cm, 10° 5 cm. Keep the static REAL275 table in `index.html` in sync.
 - `assets/images/`, `assets/videos/`: diagrams, posters, and videos.
@@ -39,7 +40,7 @@ npm run check
 npm test
 ```
 
-Checks cover links, benchmark data, desktop/mobile layout, video playback, galleries, and diagram zoom.
+Checks cover links, benchmark data, desktop/mobile layout, video playback, galleries, diagram zoom, and citation copying.
 
 ## Publish
 
