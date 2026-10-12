@@ -2,7 +2,7 @@
 
 Research website for **RYOPO: Bringing End-to-End Category-Level Object Pose Estimation into Real Time**, by Hakjin Lee, Junghoon Seo, and Jaehoon Sim (PIT IN Co.).
 
-[Project website](https://yopo-series.github.io/RYOPO-project-page/). Paper and code links are pending release; no manuscript PDF is included.
+[Project website](https://yopo-series.github.io/RYOPO-project-page/) · [Paper](https://arxiv.org/abs/2610.03013). The code link is pending release; no manuscript PDF is hosted in this repository.
 
 ## Preview
 
@@ -23,7 +23,7 @@ The network preview has no authentication; anyone who can reach the port can vie
 ## Edit
 
 - `index.html`: text, media, authors, and release links.
-- The final Citation section contains provisional BibTeX. Replace `ARXIV_ID_PENDING` with the assigned arXiv ID and remove the provisional note after submission.
+- The final Citation section contains copyable BibTeX for arXiv:2610.03013.
 - `styles.css`, `app.js`, `assets/scripts/demo-gallery.js`: layout and interactions.
 - `data/results.json`: benchmark results. Columns: method, IoU50, 5° 2 cm, 5° 5 cm, 10° 5 cm. Keep the static REAL275 table in `index.html` in sync.
 - `assets/images/`, `assets/videos/`: diagrams, posters, and videos.
@@ -44,4 +44,4 @@ Checks cover links, benchmark data, desktop/mobile layout, video playback, galle
 
 ## Publish
 
-GitHub Pages publishes the repository root from `main`. Push updates to `main` to deploy; `.nojekyll` keeps the site static. Add the final arXiv and public code URLs when ready.
+GitHub Pages publishes the repository root from `main`. Push updates to `main` to deploy; `.nojekyll` keeps the site static. Add the public code URL when ready.

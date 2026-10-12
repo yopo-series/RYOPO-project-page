@@ -17,7 +17,10 @@ for(const match of html.matchAll(/aria-controls="([^"]+)"/g)) if(!ids.includes(m
 for(const match of js.matchAll(/from\s+'(\.\/[^']+)'/g)) {
   try { await stat(path.join(root,match[1])); } catch { failures.push(`Missing JS import: ${match[1]}`); }
 }
-if(/\.pdf\b/i.test(html)) failures.push('Paper/PDF links must remain withheld.');
+for(const match of html.matchAll(/href="([^"]+)"/g)) {
+  if(!/^https?:/.test(match[1]) && /\.pdf(?:$|[?#])/i.test(match[1])) failures.push('Do not link a local manuscript PDF; use the published arXiv page.');
+}
+if(/ARXIV_ID_PENDING|arXiv soon|Provisional entry/.test(html)) failures.push('Outdated arXiv placeholder.');
 if(/\/workspace\/|\/home\/|\/fdisk/.test(html+css+js)) failures.push('Internal server paths in website.');
 async function walk(dir) {const files=[];for(const e of await readdir(dir,{withFileTypes:true})){const p=path.join(dir,e.name);if(e.isDirectory())files.push(...await walk(p));else files.push(p);}return files;}
 let bytes=0;
@@ -25,4 +28,4 @@ for(const f of await walk(path.join(root,'assets'))) {const s=await stat(f);byte
 const data=JSON.parse(await readFile(path.join(root,'data/results.json')));
 for (const [name,d] of Object.entries(data)) if(!d.rows.some(r=>r[0]==='RYOPO, mask-free')) failures.push(`No mask-free result: ${name}`);
 for(const [name,d] of Object.entries(data)) {if(!d.rows.some(r=>r[0]==='RYOPO'))failures.push(`No RYOPO row: ${name}`);for(const row of d.rows)if(row.length!==5 || row.slice(1).some(v=>typeof v!=='number'||v<0||v>100))failures.push(`Invalid metric row: ${name}`);}
-if(failures.length){console.error(failures.join('\n'));process.exitCode=1;}else console.log(`Checks passed: local links, anchors, withheld PDF, ${Object.keys(data).length} benchmark tables. Media ${(bytes/1e6).toFixed(1)} MB.`);
+if(failures.length){console.error(failures.join('\n'));process.exitCode=1;}else console.log(`Checks passed: local links, anchors, no local manuscript PDF, ${Object.keys(data).length} benchmark tables. Media ${(bytes/1e6).toFixed(1)} MB.`);

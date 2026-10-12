@@ -6,6 +6,8 @@ test('desktop content, benchmark tabs, accessible diagram zoom', async ({page})=
   await expect(page.getByRole('heading',{level:1})).toContainText('Bringing End-to-End');
   await expect(page.locator('#motion-toggle')).toHaveText(/Play previews/);
   await expect(page.locator('a[href$=".pdf"]')).toHaveCount(0);
+  await expect(page.locator('.resource-links').getByRole('link',{name:'Paper',exact:true})).toHaveAttribute('href','https://arxiv.org/abs/2610.03013');
+  await expect(page.locator('.resource-links')).not.toContainText('arXiv soon');
   await expect(page.locator('#live-demo .runtime-summary')).toContainText('≤30 FPS');
   await expect(page.locator('.runtime-details, #live-runtime')).toHaveCount(0);
   await expect(page.locator('#live-demo')).not.toContainText('Runtime measurement scopes and training details');
@@ -299,21 +301,24 @@ test('training preview preserves its duration and plays the face-down excerpt',a
   await page.locator('.usagi-grid').screenshot({path:'test-results/usagi-facedown.png',style:'.site-header{visibility:hidden}'});
 });
 
-test('provisional citation copies exactly and fits desktop and mobile', async ({page,context}) => {
+test('published arXiv citation copies exactly and fits desktop and mobile', async ({page,context}) => {
   await context.grantPermissions(['clipboard-read','clipboard-write']);
   await page.goto('/#citation');
   await expect(page.locator('main > section').last()).toHaveAttribute('id','citation');
   await expect(page.locator('#citation-title')).toHaveText('Citation');
-  await expect(page.locator('#citation-note')).toContainText('Provisional');
+  await expect(page.locator('#citation-note')).toHaveText('arXiv:2610.03013');
+  await expect(page.locator('#citation')).not.toContainText('Provisional');
   const bibtex=(await page.locator('#bibtex').textContent()).trim();
   expect(bibtex).toContain('title         = {{RYOPO}: Bringing End-to-End Category-Level Object Pose Estimation into Real Time}');
   expect(bibtex).toContain('author        = {Hakjin Lee and Junghoon Seo and Jaehoon Sim}');
-  expect(bibtex).toContain('eprint        = {ARXIV_ID_PENDING}');
+  expect(bibtex).toContain('eprint        = {2610.03013}');
   expect(bibtex).toContain('archivePrefix = {arXiv}');
+  expect(bibtex).toContain('primaryClass  = {cs.CV}');
+  expect(bibtex).toContain('url           = {https://arxiv.org/abs/2610.03013}');
   await page.getByRole('button',{name:'Copy BibTeX'}).click();
   await expect(page.locator('#citation-status')).toHaveText('BibTeX copied.');
   expect(await page.evaluate(()=>navigator.clipboard.readText())).toBe(bibtex);
-  await expect(page.locator('#citation a[href*="arxiv.org"]')).toHaveCount(0);
+  await expect(page.locator('#citation a[href*="arxiv.org"]')).toHaveAttribute('href','https://arxiv.org/abs/2610.03013');
   await page.locator('#citation').screenshot({path:'test-results/citation-desktop.png',style:'.site-header{visibility:hidden}'});
   for (const width of [320,390,768,1440]) {
     await page.setViewportSize({width,height:900});
@@ -340,7 +345,8 @@ test('citation remains readable without JavaScript', async ({browser}) => {
   try {
     const page=await context.newPage();
     await page.goto('http://127.0.0.1:4173/#citation');
-    await expect(page.locator('#bibtex')).toContainText('ARXIV_ID_PENDING');
+    await expect(page.locator('#bibtex')).toContainText('eprint        = {2610.03013}');
+    await expect(page.locator('.resource-links').getByRole('link',{name:'Paper',exact:true})).toHaveAttribute('href','https://arxiv.org/abs/2610.03013');
     await expect(page.locator('#copy-bibtex')).toBeHidden();
   } finally { await context.close(); }
 });
